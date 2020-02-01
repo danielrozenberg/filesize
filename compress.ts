@@ -61,6 +61,10 @@ function store(item: ItemConfig, error: Error | null, size: number): boolean {
   if ((compressionMap = reported.get(item.originalPath))) {
     compressionMap.set(item.compression, [size, item.maxSize]);
   }
+
+  if (item.maxSize === null) {
+    return true;
+  }
   return size < item.maxSize;
 }
 
@@ -97,6 +101,8 @@ async function compressor(item: ItemConfig): Promise<boolean> {
  */
 export default async function compress(context: Context): Promise<[boolean, Map<ItemConfig['path'], CompressionMap>]> {
   initReport(context.config);
+
+  console.log(context.config);
 
   let success: boolean = true;
   for (let iterator: number = 0; iterator < context.config.length; iterator += COMPRESSION_CONCURRENCY) {

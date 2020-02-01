@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Compression, ItemConfig } from '../validation/Condition';
+import { Compression, ItemConfig, OrderedCompressionValues } from '../validation/Condition';
 import { resolve } from 'path';
 import { isFile } from '../fs';
 const bytes = require('bytes');
@@ -79,4 +79,20 @@ export default async function ValidateFileConfig(
     config,
     error: null,
   };
+}
+
+export async function ValidateTrackConfig(originalPath: string, index: number): Promise<Array<ItemConfig>> {
+  const path = resolve(originalPath);
+  const config: Array<ItemConfig> = [];
+
+  OrderedCompressionValues.map(compression =>
+    config.push({
+      originalPath,
+      path,
+      compression,
+      maxSize: null,
+    }),
+  );
+
+  return config;
 }

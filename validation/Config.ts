@@ -114,7 +114,7 @@ const Config: ConditionFunction = (context: Context) =>
     }
 
     // If all successful, add elements for tracking size deltas.
-    await Track(context, configContext.keys);
+    await Track(context, configContext.json);
     return null;
   };
 

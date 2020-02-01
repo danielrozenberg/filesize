@@ -32,7 +32,7 @@ export interface ItemConfig {
   originalPath: string;
   path: string;
   compression: string;
-  maxSize: number;
+  maxSize: number | null;
 }
 export interface Context {
   project: string;
