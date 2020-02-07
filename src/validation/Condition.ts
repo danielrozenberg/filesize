@@ -52,6 +52,7 @@ export interface Context {
   packagePath: string;
   packageContent: string | null;
   silent: boolean;
+  track: boolean;
   originalPaths: OriginalPath;
   // Stores the result of compression <path, [...results]>
   compressed: SizeMap;

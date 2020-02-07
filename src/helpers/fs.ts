@@ -48,3 +48,13 @@ export async function readFile(path: string): Promise<string | null> {
   } catch (e) {}
   return null;
 }
+
+/**
+ * Returns contents of a path as a string
+ * @param path
+ */
+export async function writeFile(path: string, content: string): Promise<void> {
+  try {
+    await fs.writeFile(path, content, 'utf-8');
+  } catch (e) {}
+}

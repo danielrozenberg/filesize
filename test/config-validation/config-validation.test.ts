@@ -27,6 +27,7 @@ test('missing package.json should fail', async t => {
     compressed: new Map(),
     comparison: new Map(),
     silent: false,
+    track: false,
   };
   const message = await Config(context)();
 
@@ -42,6 +43,7 @@ test('unparseable package.json should fail', async t => {
     compressed: new Map(),
     comparison: new Map(),
     silent: false,
+    track: false,
   };
   const message = await Config(context)();
 
@@ -57,6 +59,7 @@ test("missing 'filesize' key from package.json should fail", async t => {
     compressed: new Map(),
     comparison: new Map(),
     silent: false,
+    track: false,
   };
   const message = await Config(context)();
 
@@ -72,6 +75,7 @@ test("missing path from item in 'filesize' should fail", async t => {
     compressed: new Map(),
     comparison: new Map(),
     silent: false,
+    track: false,
   };
   const message = await Config(context)();
 
@@ -87,6 +91,7 @@ test("missing maxSize from item in 'filesize' should fail", async t => {
     compressed: new Map(),
     comparison: new Map(),
     silent: false,
+    track: false,
   };
   const message = await Config(context)();
 
@@ -102,6 +107,7 @@ test("missing compression from item in 'filesize' should fail", async t => {
     compressed: new Map(),
     comparison: new Map(),
     silent: false,
+    track: false,
   };
   const message = await Config(context)();
 

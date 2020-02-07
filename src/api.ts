@@ -18,6 +18,7 @@ import Project from './validation/Project';
 import Config from './validation/Config';
 import { Context, SizeMap } from './validation/Condition';
 import compress from './compress';
+import { persist } from './helpers/persist';
 
 export async function report(projectPath: string): Promise<[SizeMap, SizeMap]> {
   const conditions = [Project, Config];
@@ -26,6 +27,7 @@ export async function report(projectPath: string): Promise<[SizeMap, SizeMap]> {
     packagePath: '',
     packageContent: '',
     silent: true,
+    track: false,
     originalPaths: new Map(),
     // Stores the result of compression <path, [...results]>
     compressed: new Map(),
@@ -41,5 +43,6 @@ export async function report(projectPath: string): Promise<[SizeMap, SizeMap]> {
   }
 
   await compress(context);
+  await persist(context);
   return [context.compressed, context.comparison];
 }

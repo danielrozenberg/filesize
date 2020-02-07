@@ -21,6 +21,7 @@ import { Context } from './validation/Condition';
 import compress from './compress';
 import { LogError } from './log/helpers/error';
 import { shutdown } from './helpers/process';
+import { persist } from './helpers/persist';
 
 const args = mri(process.argv.slice(2), {
   alias: { p: 'project' },
@@ -28,7 +29,11 @@ const args = mri(process.argv.slice(2), {
 });
 
 /**
- * Read the configuration from the specified project, validate it, perform requested compression, and report the results.
+ * Perform a few steps:
+ * 1. Read the configuration from the specified project
+ * 2. Validate it
+ * 3. Perform requested compression
+ * 4. Report the results.
  */
 (async function() {
   const { project: projectPath, silent } = args;
@@ -38,6 +43,7 @@ const args = mri(process.argv.slice(2), {
     packagePath: '',
     packageContent: '',
     silent,
+    track: false,
     originalPaths: new Map(),
     // Stores the result of compression <path, [...results]>
     compressed: new Map(),
@@ -56,7 +62,9 @@ const args = mri(process.argv.slice(2), {
   }
 
   if (!errorOccured) {
-    if (!(await compress(context))) {
+    const compressionSuccess = await compress(context);
+    await persist(context);
+    if (!compressionSuccess) {
       shutdown(6);
     }
   }

@@ -27,6 +27,11 @@ export async function Track(context: Context, json: any): Promise<ValidationResp
   if ('track' in json && Array.isArray(json.track)) {
     const entries: Array<string> = await glob(json.track);
 
+    // If there are entries to track, then enable tracking in the rest of the process.
+    if (entries.length > 0) {
+      context.track = true;
+    }
+
     // glob ensures the results are valid files.
     for (const entry of entries) {
       const path = resolve(entry);

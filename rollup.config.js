@@ -33,7 +33,7 @@ function makeExecutable() {
   };
 }
 
-const external = ['os', 'zlib', 'path', 'fs', 'stream', 'util', 'events', 'fast-glob', 'process'];
+const external = ['os', 'zlib', 'path', 'fs', 'stream', 'util', 'events', 'fast-glob', 'process', 'prettier', 'child_process'];
 const plugins = executable => [
   resolve({ preferBuiltins: true }),
   commonjs({ include: 'node_modules/**' }),
@@ -48,27 +48,17 @@ export default [
     output: {
       file: 'dist/filesize',
       format: 'cjs',
-      sourcemap: true,
+      sourcemap: false,
     },
     external,
     plugins: plugins(true),
-  },
-  {
-    input: 'src/index.ts',
-    output: {
-      file: 'dist/index.js',
-      format: 'cjs',
-      sourcemap: true,
-    },
-    external,
-    plugins: plugins(false),
   },
   {
     input: 'src/api.ts',
     output: {
       file: 'dist/api.mjs',
       format: 'esm',
-      sourcemap: true,
+      sourcemap: false,
     },
     external,
     plugins: plugins(false),
