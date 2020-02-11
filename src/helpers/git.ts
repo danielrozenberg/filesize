@@ -14,15 +14,22 @@
  * limitations under the License.
  */
 
-import * as childProcess from 'child_process';
-import { promisify } from 'util';
+import SimpleGit from 'simple-git/promise';
 
-const exec = promisify(childProcess.exec);
+const git = SimpleGit();
 
 export async function currentHash(): Promise<string> {
-  const value = await exec('git rev-parse HEAD');
-  return value.stdout;
+  const value = await git.revparse(['HEAD']);
+  return value;
 }
+
+// export async function checkoutBranch(branch: string): Promise<string | null> {
+//   try {
+//     await git.checkout(branch);
+//   } catch(e) {
+//     return null;
+//   }
+// }
 
 /*
 export async function getPullRequest(context, octokit) {
