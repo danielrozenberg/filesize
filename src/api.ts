@@ -16,10 +16,10 @@
 
 import Project from './validation/Project';
 import Config from './validation/Config';
-import { Context, SizeMap } from './validation/Condition';
+import { Context, SizeMap, PreCompress } from './validation/Condition';
 import compress from './compress';
 
-export async function report(projectPath: string): Promise<[SizeMap, SizeMap]> {
+export async function report(projectPath: string, preCompress?: PreCompress): Promise<[SizeMap, SizeMap]> {
   const conditions = [Project, Config];
   let context: Context = {
     projectPath,
@@ -31,6 +31,7 @@ export async function report(projectPath: string): Promise<[SizeMap, SizeMap]> {
     compressed: new Map(),
     // Stores the basis of comparison.
     comparison: new Map(),
+    preCompress: preCompress || ((path, content) => content),
   };
 
   for (const condition of conditions) {

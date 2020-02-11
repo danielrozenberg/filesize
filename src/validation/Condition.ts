@@ -47,6 +47,8 @@ export const SizeMapValueIndex = {
 };
 export type SizeMap = Map<path, SizeMapValue>;
 
+export type PreCompress = (path: string, content: string) => string;
+
 export interface Context {
   projectPath: string;
   packagePath: string;
@@ -57,4 +59,5 @@ export interface Context {
   compressed: SizeMap;
   // Stores the basis of comparison.
   comparison: SizeMap;
+  preCompress: PreCompress;
 }

@@ -43,6 +43,7 @@ const args = mri(process.argv.slice(2), {
     compressed: new Map(),
     // Stores the basis of comparison.
     comparison: new Map(),
+    preCompress: (path, content) => content,
   };
 
   let errorOccured: boolean = false;

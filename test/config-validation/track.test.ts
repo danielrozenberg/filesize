@@ -29,6 +29,7 @@ test('including trackable items should succeed', async t => {
     compressed: new Map(),
     comparison: new Map(),
     silent: false,
+    preCompress: (path, content) => content,
   };
   const message = await Config(context)();
 

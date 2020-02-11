@@ -28,6 +28,7 @@ test('valid directory should pass', async t => {
     compressed: new Map(),
     comparison: new Map(),
     silent: false,
+    preCompress: (path, content) => content,
   };
   const message = await Project(context)();
 
@@ -35,7 +36,7 @@ test('valid directory should pass', async t => {
 });
 
 test('invalid directory should fail', async t => {
-  const context = {
+  const context: Context = {
     packagePath: '',
     projectPath: 'test/project-validation/fixtures-invalid',
     packageContent: '',
@@ -43,6 +44,7 @@ test('invalid directory should fail', async t => {
     compressed: new Map(),
     comparison: new Map(),
     silent: false,
+    preCompress: (path, content) => content,
   };
   const message = await Project(context)();
 
@@ -50,7 +52,7 @@ test('invalid directory should fail', async t => {
 });
 
 test('directory missing package.json should fail', async t => {
-  const context = {
+  const context: Context = {
     packagePath: '',
     projectPath: 'test/project-validation/fixtures/missing-package-json',
     packageContent: '',
@@ -58,6 +60,7 @@ test('directory missing package.json should fail', async t => {
     compressed: new Map(),
     comparison: new Map(),
     silent: false,
+    preCompress: (path, content) => content,
   };
   const message = await Project(context)();
 
