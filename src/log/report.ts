@@ -19,7 +19,7 @@ import { Context, OrderedCompressionValues, SizeMapValue } from '../validation/C
 import { maxFormatDisplay, formats } from './helpers/format';
 import { maxPathDisplay } from './helpers/path';
 import { write } from './helpers/output';
-import { prettyBytes } from './helpers/bytes';
+import { prettyBytes, prettyDelta } from './helpers/bytes';
 import { ICONS } from './helpers/icons';
 
 // Disable output colors for test runs.
@@ -57,32 +57,36 @@ export class Report {
     write(`${''.padEnd(this.maxPathDisplay + 5)} ${formats(this.maxFormatDisplay)}\n`);
   }
 
-  protected displaySize = (sizeMapValue: SizeMapValue, mapIndex: number): boolean | null => {
-    const [size, maxSize] = sizeMapValue[mapIndex];
+  protected displaySize = (currentSize: SizeMapValue, comparisonSize: SizeMapValue | undefined, mapIndex: number): boolean | null => {
+    const [size, maxSize] = currentSize[mapIndex];
+    const [comparedSize] = comparisonSize ? comparisonSize[mapIndex] : [undefined];
     if (size === undefined || size === null) {
       this.currentLine += dim().grey('–'.padEnd(this.maxFormatDisplay));
       return size === undefined ? false : null;
     }
 
-    const outputBytes = prettyBytes(size);
+    const outputBytes: string = prettyBytes(size);
+    const deltaBytes: number | null = comparedSize ? size - comparedSize : null;
+    const outputDeltaBytes: string | null = deltaBytes ? prettyDelta(deltaBytes) : null;
+    const output: string = outputBytes + (outputDeltaBytes ? outputDeltaBytes : '');
     if (maxSize === undefined) {
-      this.currentLine += dim().grey(outputBytes.padEnd(this.maxFormatDisplay));
+      this.currentLine += dim().grey(output.padEnd(this.maxFormatDisplay));
       return false;
     }
     if (size < maxSize) {
       if (1 - size / maxSize < 0.05) {
         this.warning++;
-        this.currentLine += yellow(outputBytes.padEnd(this.maxFormatDisplay));
+        this.currentLine += yellow(output.padEnd(this.maxFormatDisplay));
         return false;
       }
 
       this.success++;
-      this.currentLine += dim().green(outputBytes.padEnd(this.maxFormatDisplay));
+      this.currentLine += dim().green(output.padEnd(this.maxFormatDisplay));
       return false;
     }
 
     this.failure++;
-    this.currentLine += red(outputBytes.padEnd(this.maxFormatDisplay));
+    this.currentLine += red(output.padEnd(this.maxFormatDisplay));
     return true;
   };
 
@@ -107,7 +111,7 @@ export class Report {
       let isProcessing = false;
       this.currentLine = ' ' + displayPath.substring(displayPath.length - this.maxPathDisplay).padEnd(this.maxPathDisplay) + '  ';
       for (let i = 0; i < OrderedCompressionValues.length; i++) {
-        const hasFailure = this.displaySize(sizeMapValue, i);
+        const hasFailure = this.displaySize(sizeMapValue, context.comparison.get(path), i);
         if (hasFailure === null) {
           isProcessing = true;
         } else if (includesFailure !== true) {

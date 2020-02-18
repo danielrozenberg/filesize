@@ -32,6 +32,8 @@ export async function report(projectPath: string): Promise<[SizeMap, SizeMap]> {
     // Stores the result of compression <path, [...results]>
     compressed: new Map(),
     // Stores the basis of comparison.
+    pattern: null,
+    comparisonPath: null,
     comparison: new Map(),
   };
 

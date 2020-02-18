@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "bytes": "3.1.0",
+    "escape-string-regexp": "2.0.0",
     "fast-glob": "3.1.1",
     "kleur": "3.0.3",
     "mri": "1.1.4",
@@ -59,6 +60,7 @@
     "yarn": "1.22.0"
   },
   "filesize": {
+    "patterns": ["[name]-[hash][extension]"],
     "track": [
       "./dist/**/*.mjs",
       "./dist/filesize"
@@ -87,5 +89,8 @@
       "pre-push": "yarn npm-run-all clean build test",
       "pre-commit": "lint-staged"
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

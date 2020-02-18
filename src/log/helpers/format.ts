@@ -15,7 +15,7 @@
  */
 
 import { OrderedCompressionValues, Context } from '../../validation/Condition';
-import { prettyBytes } from './bytes';
+import { prettyBytes, prettyDelta } from './bytes';
 
 const COMPRESSED_NAMES_LENGTH = OrderedCompressionValues.map(compression => compression.length);
 const SPACE_AFTER_COMPRESSION = 2;
@@ -27,15 +27,37 @@ const SPACE_AFTER_COMPRESSION = 2;
 export function maxFormatDisplay(context: Context): number {
   const itemsToConsider: Array<number> = [...COMPRESSED_NAMES_LENGTH];
   const paths = Array.from(context.compressed.keys());
-  for (const path of paths) {
-    const sizeMapValue = context.compressed.get(path);
-    if (!sizeMapValue) {
-      continue;
-    }
 
-    const [size] = sizeMapValue[OrderedCompressionValues.indexOf('none')];
-    if (size) {
-      itemsToConsider.push(prettyBytes(size).length);
+  if (context.comparisonPath) {
+    // When comparing, display delta of comparison, not actual sizes.
+    for (const path of paths) {
+      const sizeMapValue = context.compressed.get(path);
+      if (!sizeMapValue) {
+        continue;
+      }
+
+      const [size] = sizeMapValue[OrderedCompressionValues.indexOf('none')];
+      if (size) {
+        const outputBytes = prettyBytes(size);
+        const comparedSize = context.comparison.get(path)?.[OrderedCompressionValues.indexOf('none')]?.[0];
+        const deltaBytes: number | null = comparedSize ? size - comparedSize : null;
+        const outputDeltaBytes: string | null = deltaBytes ? prettyDelta(deltaBytes) : null;
+        const output: string = outputBytes + (outputDeltaBytes ? outputDeltaBytes : '');
+        console.log({ comparedSize, size, delta: size - (comparedSize as number), deltaBytes, outputDeltaBytes, length: output.length });
+        itemsToConsider.push(output.length);
+      }
+    }
+  } else {
+    for (const path of paths) {
+      const sizeMapValue = context.compressed.get(path);
+      if (!sizeMapValue) {
+        continue;
+      }
+
+      const [size] = sizeMapValue[OrderedCompressionValues.indexOf('none')];
+      if (size) {
+        itemsToConsider.push(prettyBytes(size).length);
+      }
     }
   }
 

@@ -66,7 +66,7 @@ const CONDITIONS = [
         return `There is no 'filesize' configuration in '${context.packagePath}'`;
       }
 
-      const { track, ...keys } = json;
+      const { track, pattern, ...keys } = json;
       if (Object.entries(keys).length === 0 && track === undefined) {
         return `There is no data inside the 'filesize' configuration in '${context.packagePath}'`;
       }
@@ -78,7 +78,6 @@ const CONDITIONS = [
         );
       }
 
-      // Since we have tracked entries, we need to store them
       const parseTrackingResult = await Track(context, json);
       if (parseTrackingResult !== null) {
         return parseTrackingResult;

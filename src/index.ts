@@ -17,6 +17,7 @@
 import mri from 'mri';
 import Project from './validation/Project';
 import Config from './validation/Config';
+import Comparison from './validation/Comparison';
 import { Context } from './validation/Condition';
 import compress from './compress';
 import { LogError } from './log/helpers/error';
@@ -24,8 +25,8 @@ import { shutdown } from './helpers/process';
 import { persist } from './helpers/persist';
 
 const args = mri(process.argv.slice(2), {
-  alias: { p: 'project' },
-  default: { project: process.cwd(), silent: false },
+  alias: { p: 'project', c: 'comparison' },
+  default: { project: process.cwd(), silent: false, comparison: null },
 });
 
 /**
@@ -36,8 +37,8 @@ const args = mri(process.argv.slice(2), {
  * 4. Report the results.
  */
 (async function() {
-  const { project: projectPath, silent } = args;
-  const conditions = [Project, Config];
+  const { project: projectPath, silent, comparison } = args;
+  const conditions = [Project, Config, Comparison];
   const context: Context = {
     projectPath,
     packagePath: '',
@@ -47,6 +48,8 @@ const args = mri(process.argv.slice(2), {
     originalPaths: new Map(),
     // Stores the result of compression <path, [...results]>
     compressed: new Map(),
+    pattern: null,
+    comparisonPath: comparison,
     // Stores the basis of comparison.
     comparison: new Map(),
   };

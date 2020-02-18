@@ -21,5 +21,22 @@ const bytes = require('bytes');
  * @param size
  */
 export function prettyBytes(size: number): string {
-  return bytes(size, { unit: 'kb', fixedDecimals: true, unitSeparator: ' ' });
+  return bytes(size, { unit: 'KB', fixedDecimals: true, unitSeparator: ' ' });
+}
+
+/**
+ * Format delta into more human readable string.
+ * @param current the current size of this file
+ * @param comparison the previous size of this file (or matched file)
+ */
+export function prettyDelta(current: number, comparison: number | undefined): string {
+  const delta = current - (comparison || 0);
+
+  if (delta > 0) {
+    return `+${bytes(delta)}`;
+  }
+  if (delta < 0) {
+    return `-${bytes(delta)}`;
+  }
+  return '-';
 }

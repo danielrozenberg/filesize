@@ -1,0 +1,6 @@
+{
+  "filesize": {
+    "pattern": ["[name]-[hash][extension]"],
+    "track": ["test/config-validation/fixtures/pattern/*"]
+  }
+}

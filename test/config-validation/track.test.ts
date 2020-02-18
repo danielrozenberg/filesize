@@ -27,6 +27,8 @@ test('including trackable items should succeed', async t => {
     packageContent: '',
     originalPaths: new Map(),
     compressed: new Map(),
+    comparisonPath: null,
+    pattern: null,
     comparison: new Map(),
     silent: false,
     track: false,

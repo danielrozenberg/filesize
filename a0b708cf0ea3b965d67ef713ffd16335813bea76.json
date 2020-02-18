@@ -1,0 +1,18 @@
+[
+  [
+    "/home/kbax/Projects/filesize/dist/filesize",
+    [
+      [14892, 3072],
+      [16665, 3891],
+      [52996, 20480]
+    ]
+  ],
+  [
+    "/home/kbax/Projects/filesize/dist/api.mjs",
+    [
+      [25905, null],
+      [30438, 10240],
+      [133870, null]
+    ]
+  ]
+]

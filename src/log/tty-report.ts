@@ -57,7 +57,7 @@ export class TTYReport extends Report {
       let isProcessing = false;
       this.currentLine = ' ' + displayPath.substring(displayPath.length - this.maxPathDisplay).padEnd(this.maxPathDisplay) + '  ';
       for (let i = 0; i < OrderedCompressionValues.length; i++) {
-        const hasFailure = this.displaySize(sizeMapValue, i);
+        const hasFailure = this.displaySize(sizeMapValue, context.comparison.get(path), i);
         if (hasFailure === null) {
           isProcessing = true;
         } else if (includesFailure !== true) {
